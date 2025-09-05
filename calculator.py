@@ -16,17 +16,17 @@ class Button:
     def draw(self, img, hover=False):
         x, y = self.pos
         if hover:
-            color = (0, 255, 255)  # Yellow background
-            text_color = (0, 0, 0)  # Black text
+            color = (0, 255, 255) 
+            text_color = (0, 0, 0) 
         else:
-            color = (50, 50, 50)  # Dark gray background
-            text_color = (255, 255, 255)  # White text
+            color = (50, 50, 50) 
+            text_color = (255, 255, 255) 
 
-        # Draw button rectangle
+        
         cv2.rectangle(img, (x, y), (x + self.w, y + self.h), color, cv2.FILLED)
         cv2.rectangle(img, (x, y), (x + self.w, y + self.h), (255, 255, 255), 2)
 
-        # === Center text dynamically ===
+       
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 1.2
         thickness = 2
@@ -39,7 +39,7 @@ class Button:
         bx, by = self.pos
         return bx <= x <= bx + self.w and by <= y <= by + self.h
 
-# === Calculator Buttons ===
+
 keys = [
     ["7", "8", "9", "+"],
     ["4", "5", "6", "-"],
@@ -55,7 +55,7 @@ expression = ""
 last_result = ""
 last_click, delay = 0, 0.6
 
-# === Camera ===
+
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -66,20 +66,20 @@ while True:
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     res = hands.process(rgb)
 
-    # Calculator background (black canvas)
+    
     calc = np.zeros((700, 600, 3), np.uint8)
 
-    # Display last result
+    
     if last_result:
         cv2.putText(calc, f"Last: {last_result}", (60, 40),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 200, 200), 2)
 
-    # Expression box
+   
     cv2.rectangle(calc, (50, 70), (500, 130), (0, 0, 0), cv2.FILLED)
     cv2.putText(calc, expression, (60, 115),
                 cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 255), 2)
 
-    # Draw buttons
+    
     for b in button_list:
         b.draw(calc)
 
@@ -89,23 +89,23 @@ while True:
         lm_list = [(int(p.x*w), int(p.y*h)) for p in lm.landmark]
         mp_draw.draw_landmarks(frame, lm, mp_hands.HAND_CONNECTIONS)
 
-        # Thumb & index tips
+       
         x1, y1 = lm_list[4]
         x2, y2 = lm_list[8]
         cx, cy = (x1+x2)//2, (y1+y2)//2
         length = math.hypot(x2-x1, y2-y1)
 
-        # Map to calculator space
+        
         calc_x, calc_y = int((cx/w)*600), int((cy/h)*700)
 
-        # Find hovered button
+        
         for b in button_list:
             if b.is_hover(calc_x, calc_y):
                 hovered = b
                 b.draw(calc, hover=True)
                 break
 
-        # Detect click
+        
         if hovered and length < 40 and time.time()-last_click > delay:
             val = hovered.val
             if val == "C":
@@ -122,13 +122,14 @@ while True:
                 expression += val
             last_click = time.time()
 
-    # === Blend Calculator with Camera ===
+    
     calc_resized = cv2.resize(calc, (frame.shape[1], frame.shape[0]))
     blended = cv2.addWeighted(frame, 0.6, calc_resized, 0.4, 0)
 
-    # Show
+    
     cv2.imshow("Virtual Calculator", blended)
     if cv2.waitKey(1) & 0xFF in [27, ord('q')]: break
 
 cap.release()
 cv2.destroyAllWindows()
+
