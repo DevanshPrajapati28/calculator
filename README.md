@@ -28,20 +28,6 @@ Virtual-Calculator/
 │── calculator.py # Main program
 │── README.md # Project documentation
 
-
----
-
-## ⚙️ Installation  
-
-Clone the repository:  
-```bash
-git clone https://github.com/your-username/virtual-calculator.git
-cd virtual-calculator
-
-Install dependencies:
-
-pip install opencv-python mediapipe numpy
-
 ▶️ Usage
 
 Run the calculator:
@@ -70,3 +56,18 @@ Add scientific functions (sin, cos, log, etc.)
 Support multi-hand interaction
 
 Improve UI with better styling
+
+---
+
+## ⚙️ Installation  
+
+Clone the repository:  
+```bash
+git clone https://github.com/your-username/virtual-calculator.git
+cd virtual-calculator
+
+Install dependencies:
+
+pip install opencv-python mediapipe numpy
+
+
